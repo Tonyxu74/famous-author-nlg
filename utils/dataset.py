@@ -7,12 +7,13 @@ import torch
 
 
 def findFile(root_dir, contains):
-    '''
+    """
     Finds file with given root directory containing keyword "contains"
     :param root_dir: root directory to search in
     :param contains: the keyword that should be contained
     :return: a list of the file paths of found files
-    '''
+    """
+
     all_files = []
     for path, subdirs, files in os.walk(root_dir):
         for file in files:
@@ -23,12 +24,14 @@ def findFile(root_dir, contains):
 
 
 class Dataset(data.Dataset):
-    'Characterizes a dataset for PyTorch'
+    """Characterizes a dataset for PyTorch"""
 
-    def __init__(self, datapath, txtcode, eval):
-        'Initialization'
-
-        self.eval = eval
+    def __init__(self, datapath, txtcode):
+        """
+        Initializes dataset for given author and datapath
+        :param datapath: path to data
+        :param txtcode: code that describes the author to load data from
+        """
 
         # find files for the given textcode, if textcode isn't supported, throw error
         if txtcode not in ['poe', 'homer', 'shakespeare']:
@@ -63,11 +66,20 @@ class Dataset(data.Dataset):
         self.len_dataset = self.text_input.shape[1] - args.seq_len - 1
 
     def __len__(self):
-        'Denotes the total number of samples'
+        """
+        Denotes the total number of samples
+        :return: length of the dataset
+        """
+
         return self.len_dataset
 
     def __getitem__(self, index):
-        'Generates one sample of data'
+        """
+        Generates one sample of data
+        :param index: index of the data in the datalist
+        :return: returns the data in longtensor format
+        """
+
         data = np.asarray([self.text_input[:, index + i] for i in range(args.seq_len)])
         label = np.asarray([self.text_input[:, index + i + 1] for i in range(args.seq_len)])
 
@@ -77,7 +89,15 @@ class Dataset(data.Dataset):
         return data, label
 
 
-def GenerateIterator(datapath, txtcode, eval=False, shuffle=True):
+def GenerateIterator(datapath, txtcode, shuffle=True):
+    """
+    Generates a batch iterator for data
+    :param datapath: path to data
+    :param txtcode: code that describes the author to load data from
+    :param shuffle: whether to shuffle the batches around or not
+    :return: a iterator combining the data into batches
+    """
+
     params = {
         'batch_size': 1,  # batch size must be 1, as data is already separated into batches
         'shuffle': shuffle,
@@ -85,4 +105,4 @@ def GenerateIterator(datapath, txtcode, eval=False, shuffle=True):
         'drop_last': False,
     }
 
-    return data.DataLoader(Dataset(datapath=datapath, txtcode=txtcode, eval=eval), **params)
+    return data.DataLoader(Dataset(datapath=datapath, txtcode=txtcode), **params)

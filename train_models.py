@@ -9,14 +9,14 @@ from myargs import args
 
 
 def train(datapath, txtcode, model_name, continue_train=False):
-    '''
+    """
     Trains a RNN or LSTM model on the given datapath
     :param datapath: path to data
     :param txtcode: a code describing which author to train with
     :param model_name: the model name to train
     :param continue_train: whether the model will continue training from a certain point or not
     :return: no returns, saves a model for each epoch
-    '''
+    """
 
     # create iterator
     train_iter = GenerateIterator(datapath, txtcode)
@@ -64,7 +64,6 @@ def train(datapath, txtcode, model_name, continue_train=False):
         pred_classes = []
         ground_truths = []
 
-        # training
         for text, label in pbar:
 
             # remove from batch created by GenerateIterator
@@ -72,7 +71,7 @@ def train(datapath, txtcode, model_name, continue_train=False):
             label = label[0]
 
             # intialize states
-            hidden_state = model.init_hidden(args.batch_size)
+            hidden_state = model.init_hidden(batch_size=args.batch_size)
 
             # move to GPU
             if torch.cuda.is_available():
@@ -111,7 +110,7 @@ def train(datapath, txtcode, model_name, continue_train=False):
             epoch, accuracy, losses_sum / n_total
         ))
 
-        # change modulo number to save every x epochs
+        # change modulo number to save every "number" epochs
         if epoch % 1 == 0:
             state = {
                 'epoch': epoch,

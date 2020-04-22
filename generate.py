@@ -5,6 +5,18 @@ import random
 
 
 def generate(datapath, txtcode, model_name, model_epoch, seed=None, seedlen=5, output_len=100):
+    """
+    Generate a sequence of text based on a pretrained model and an author
+    :param datapath: path to data
+    :param txtcode: a code describing which author to train with
+    :param model_name: name of the model to load
+    :param model_epoch: the epoch of the loaded model
+    :param seed: a seed to start generating words from
+    :param seedlen: length of the seed in words
+    :param output_len: length of the output text in words
+    :return: none, prints out the generated sequence
+    """
+
     # create iterator
     iter = GenerateIterator(datapath, txtcode)
 
@@ -42,7 +54,10 @@ def generate(datapath, txtcode, model_name, model_epoch, seed=None, seedlen=5, o
 
         # run the model on the seed for every item
         for word in seed:
+
+            # append the actual words of the seed to the output
             output.append(iter.dataset.int_to_word[word])
+
             if torch.cuda.is_available():
                 word = torch.tensor([[word]]).long().cuda()
             else:
@@ -59,7 +74,7 @@ def generate(datapath, txtcode, model_name, model_epoch, seed=None, seedlen=5, o
         chosen_int = random.choice(indices)
         output.append(iter.dataset.int_to_word[chosen_int])
 
-        # now generate a sequence of words
+        # now generate a sequence of words, similar to seed except the previously generated word becomes the new input
         for i in range(output_len - seedlen):
             if torch.cuda.is_available():
                 word = torch.tensor([[chosen_int]]).long().cuda()
@@ -74,6 +89,7 @@ def generate(datapath, txtcode, model_name, model_epoch, seed=None, seedlen=5, o
 
             output.append(iter.dataset.int_to_word[chosen_int])
 
+    # print the output as a space-separated string
     print(' '.join(output))
 
 

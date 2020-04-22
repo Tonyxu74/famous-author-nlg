@@ -3,14 +3,20 @@ from utils.dataset import findFile
 
 
 class MC_Model:
+    """A simple bigram Markov Chain model"""
 
     def __init__(self, datapath, txtcode):
+        """
+        Initializes the MC model
+        :param datapath: path to the data
+        :param txtcode: code describing which author the model will operate on
+        """
+
         self.model = None
 
         # find files for the given textcode, if textcode isn't supported, throw error
         if txtcode not in ['poe', 'homer', 'shakespeare']:
             raise Exception(f'Text code not supported! "{txtcode}" given, "poe", "shakespeare", "homer" expected.')
-
         filelist = findFile(datapath, txtcode)
 
         # open all files for given textcode
@@ -22,6 +28,10 @@ class MC_Model:
         self.txt = txt.split()
 
     def train(self):
+        """
+        Trains the MC model
+        :return: None
+        """
 
         model = {}
 
@@ -47,6 +57,13 @@ class MC_Model:
         self.model = model
 
     def generate_text(self, seed=None, length=100):
+        """
+        Generates a sequence of text based on the trained MC model
+        :param seed: a seed to use to begin generating the sequence
+        :param length: length of the generated sequence
+        :return: generated sequence as a string
+        """
+
         # if no seed given, generate a random one from all the bigrams
         if seed is None:
             seed = random.choice(list(self.model.keys()))
