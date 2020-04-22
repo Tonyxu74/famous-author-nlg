@@ -3,6 +3,7 @@ import os
 from collections import Counter
 from myargs import args
 import numpy as np
+import torch
 
 
 def findFile(root_dir, contains):
@@ -52,14 +53,13 @@ class Dataset(data.Dataset):
 
         # convert entire text to integers
         int_text = [self.word_to_int[word] for word in txt]
-        print(int_text[:10])
 
         # total length of the text except for an incomplete batch at the end, cutoff text at this
         total_len = len(int_text) - len(int_text) % args.batch_size
-        int_text = int_text[:total_len]
+        self.int_text = int_text[:total_len]
 
         # reshape into batches, length of dataset is so that an entire sequence and its label can be generated
-        self.text_input = np.reshape(int_text, (args.batch_size, -1))
+        self.text_input = np.reshape(self.int_text, (args.batch_size, -1))
         self.len_dataset = self.text_input.shape[1] - args.seq_len - 1
 
     def __len__(self):
@@ -70,6 +70,9 @@ class Dataset(data.Dataset):
         'Generates one sample of data'
         data = np.asarray([self.text_input[:, index + i] for i in range(args.seq_len)])
         label = np.asarray([self.text_input[:, index + i + 1] for i in range(args.seq_len)])
+
+        data = torch.from_numpy(data).long()
+        label = torch.from_numpy(label).long()
 
         return data, label
 

@@ -20,16 +20,18 @@ class RNN_Model(nn.Module):
         )
         self.dense = nn.Linear(in_features=self.RNN_size, out_features=self.n_vocab)
 
-    def init_hidden(self):
-        return torch.zeros(args.RNN_layers, args.batch_size, self.RNN_size)
+    def init_hidden(self, batch_size):
+        if torch.cuda.is_available():
+            return torch.zeros(args.RNN_layers, batch_size, self.RNN_size).cuda()
+        else:
+            return torch.zeros(args.RNN_layers, batch_size, self.RNN_size)
 
-    def forward(self, x):
-        hidden_0 = self.init_hidden()
+    def forward(self, x, state):
         embedded_vals = self.embedding(x)
-        rnn_out, hidden_n = self.RNN(embedded_vals, hidden_0)
+        rnn_out, new_state = self.RNN(embedded_vals, state)
         vocab_logits = self.dense(rnn_out)
 
-        return vocab_logits
+        return vocab_logits, new_state
 
 
 class LSTM_Model(nn.Module):
@@ -49,14 +51,17 @@ class LSTM_Model(nn.Module):
         )
         self.dense = nn.Linear(in_features=self.LSTM_size, out_features=self.n_vocab)
 
-    def init_hidden(self):
-        return torch.zeros(args.LSTM_layers, args.batch_size, self.LSTM_size),\
-               torch.zeros(args.LSTM_layers, args.batch_size, self.LSTM_size)
+    def init_hidden(self, batch_size):
+        if torch.cuda.is_available():
+            return (torch.zeros(args.LSTM_layers, batch_size, self.LSTM_size).cuda(),
+               torch.zeros(args.LSTM_layers, batch_size, self.LSTM_size).cuda())
+        else:
+            return (torch.zeros(args.LSTM_layers, batch_size, self.LSTM_size),
+                   torch.zeros(args.LSTM_layers, batch_size, self.LSTM_size))
 
-    def forward(self, x):
-        hidden_0, cell_0 = self.init_hidden()
+    def forward(self, x, state):
         embedded_vals = self.embedding(x)
-        lstm_out, (hidden_n, cell_n) = self.LSTM(embedded_vals, (hidden_0, cell_0))
+        lstm_out, new_state = self.LSTM(embedded_vals, state)
         vocab_logits = self.dense(lstm_out)
 
-        return vocab_logits
+        return vocab_logits, new_state
