@@ -94,5 +94,13 @@ def generate(datapath, txtcode, model_name, model_epoch, seed=None, seedlen=5, o
 
 
 if __name__ == "__main__":
-    generate('./data', 'poe', model_name='LSTM', model_epoch=1)
+    generate('./data', 'poe', model_name='RNN', model_epoch=1)
 
+"""
+Poe:
+spoke--the teeth glancing back, with an immense distance over it, we had some little difficulty of people to take the 
+same condition of the main building and three circular Their face are exceedingly lofty, and thought the world which had 
+been the victim for a long and very brilliant teeth. The other people of a better portion of the huge walls to its full 
+length, although they left the machine over as a vessel and in each other the hole by the sea, or an instant afterward 
+a man was more of a brilliant and ghastly fangs were upon their exertions,
+"""
