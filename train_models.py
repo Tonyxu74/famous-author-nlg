@@ -8,7 +8,7 @@ import numpy as np
 from myargs import args
 
 
-def train(datapath, txtcode, model_name, continue_train=False):
+def train(datapath, txtcode, model_name, continue_train=True):
     """
     Trains a RNN or LSTM model on the given datapath
     :param datapath: path to data
@@ -42,7 +42,11 @@ def train(datapath, txtcode, model_name, continue_train=False):
 
     # if training model from previous saved weights
     if continue_train:
-        pretrained_dict = torch.load('insert here')['state_dict']
+        pretrained_dict = torch.load('./models/{}/{}_model_{}.pt'.format(
+            txtcode,
+            model_name,
+            args.pretrain_epoch
+        ))['state_dict']
         model_dict = model.state_dict()
         pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
         model_dict.update(pretrained_dict)
@@ -121,5 +125,5 @@ def train(datapath, txtcode, model_name, continue_train=False):
 
 
 if __name__ == '__main__':
-    train('./data', 'poe', 'RNN')
+    train('./data', 'poe', 'LSTM')
 
