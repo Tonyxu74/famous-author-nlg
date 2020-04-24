@@ -8,7 +8,7 @@ import numpy as np
 from myargs import args
 
 
-def train(datapath, txtcode, model_name, continue_train=True):
+def train(datapath, txtcode, model_name, continue_train=False):
     """
     Trains a RNN or LSTM model on the given datapath
     :param datapath: path to data
@@ -17,6 +17,8 @@ def train(datapath, txtcode, model_name, continue_train=True):
     :param continue_train: whether the model will continue training from a certain point or not
     :return: no returns, saves a model for each epoch
     """
+
+    print(f'Training on {txtcode} || Model is {model_name}')
 
     # create iterator
     train_iter = GenerateIterator(datapath, txtcode)

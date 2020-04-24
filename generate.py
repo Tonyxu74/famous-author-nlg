@@ -67,7 +67,7 @@ def generate(datapath, txtcode, model_name, model_epoch, seed=None, seedlen=5, o
             prediction, hidden_state = model(word, hidden_state)
 
         # k is arbitrarily 5, obtain topk of word guesses
-        values, indices = torch.topk(prediction, k=5)
+        values, indices = torch.topk(prediction, k=10)
 
         # take the first item in list twice, as this item added 2 dimensions for sequence and batch
         indices = indices.tolist()[0][0]
@@ -83,7 +83,7 @@ def generate(datapath, txtcode, model_name, model_epoch, seed=None, seedlen=5, o
 
             prediction, hidden_state = model(word, hidden_state)
 
-            values, indices = torch.topk(prediction, k=5)
+            values, indices = torch.topk(prediction, k=10)
             indices = indices.tolist()[0][0]
             chosen_int = random.choice(indices)
 
@@ -94,13 +94,30 @@ def generate(datapath, txtcode, model_name, model_epoch, seed=None, seedlen=5, o
 
 
 if __name__ == "__main__":
-    generate('./data', 'poe', model_name='LSTM', model_epoch=3)
+    generate('./data', 'poe', model_name='RNN', model_epoch=4)
 
 """
-Poe RNN epoch 1:
-spoke--the teeth glancing back, with an immense distance over it, we had some little difficulty of people to take the 
-same condition of the main building and three circular Their face are exceedingly lofty, and thought the world which had 
-been the victim for a long and very brilliant teeth. The other people of a better portion of the huge walls to its full 
-length, although they left the machine over as a vessel and in each other the hole by the sea, or an instant afterward 
-a man was more of a brilliant and ghastly fangs were upon their exertions,
+Poe RNN epoch 4:
+just mentioned . To say the question of Mrs would appear but either on our friends . My immediate regard or some common 
+limits could found its extreme horror . The question were occupied by Peters of a third . These few and we perceive on 
+no particular portion of her body alone without getting on this occasion, and so much obvious to the earth a portion and 
+with the left of no farther than ourself for the than thirty hundred feet are the black building which set the rope as 
+far open the table which lay before the loss to
+
+
+
+
+Poe LSTM epoch 3:
+teares shall fill your eye in the street just one above those thousand hours after nine inches in its surface the 
+surface of the water, we saw a few small and fifty persons of a large gale had been thrown into an opposite window that 
+our head would the same appearance were about so far a small southern water, of the two men very large as far above his 
+own southern hand, is not in any other respect a thousand more fifty miles to be the ordinary appearance which has been 
+so easily observed that, as if we have been in
+
+evidence of extensive general reading. In you your mind this, after which he thought he took it until just afterward 
+until we came in a single search about one hour, and the third one, in their head, and, to find ourselves thus in a 
+strong sound than our usual In their position as most obvious than these purposes appeared to me as I thought proper 
+enough would pass down all upon me as to say, from them, I saw an air rather a foot in less utterly less vivid power for 
+their absolute general interest apparent than my seven and seventy
+
 """

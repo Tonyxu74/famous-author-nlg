@@ -45,17 +45,25 @@ class Dataset(data.Dataset):
             with open(filepath, 'r', encoding='utf8') as txtfile:
                 txt += txtfile.read()
 
+        punc_text = []
+
         txt = txt.split()
+        for word in txt:
+            if "." in word:
+                punc_text.append(word.replace('.', ''))
+                punc_text.append('.')
+            else:
+                punc_text.append(word)
 
         # give the vocabulary of the text from most common to least common word
-        unique_words = Counter(txt)
+        unique_words = Counter(punc_text)
         vocab = sorted(unique_words, key=unique_words.get, reverse=True)
         self.vocab_len = len(vocab)
         self.int_to_word = {key: word for (key, word) in enumerate(vocab)}
         self.word_to_int = {word: key for (key, word) in enumerate(vocab)}
 
         # convert entire text to integers
-        int_text = [self.word_to_int[word] for word in txt]
+        int_text = [self.word_to_int[word] for word in punc_text]
 
         # total length of the text except for an incomplete batch at the end, cutoff text at this
         total_len = len(int_text) - len(int_text) % args.batch_size
