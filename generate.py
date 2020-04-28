@@ -2,6 +2,7 @@ from utils.dataset import GenerateIterator
 from utils.model import LSTM_Model, RNN_Model
 import torch
 import random
+from myargs import args
 
 
 def generate(datapath, txtcode, model_name, model_epoch, seed=None, seedlen=5, output_len=100):
@@ -12,7 +13,7 @@ def generate(datapath, txtcode, model_name, model_epoch, seed=None, seedlen=5, o
     :param model_name: name of the model to load
     :param model_epoch: the epoch of the loaded model
     :param seed: a seed to start generating words from
-    :param seedlen: length of the seed in words
+    :param seedlen: length of the seed in words, ONLY USED FOR RANDOM SEED
     :param output_len: length of the output text in words
     :return: none, prints out the generated sequence
     """
@@ -20,10 +21,17 @@ def generate(datapath, txtcode, model_name, model_epoch, seed=None, seedlen=5, o
     # create iterator
     iter = GenerateIterator(datapath, txtcode)
 
-    # create a random seed with some length, note given seed must be in integer form already
+    # create a random seed with some length
     if seed is None:
         rand_int = random.randint(0, len(iter.dataset.int_text) - seedlen)
         seed = iter.dataset.int_text[rand_int: rand_int + seedlen]
+
+    # convert the given seed to integer form
+    else:
+        int_seed = []
+        for word in seed:
+            int_seed.append(iter.dataset.word_to_int[word])
+        seed = int_seed
 
     # get model
     if model_name == 'RNN':
@@ -67,7 +75,7 @@ def generate(datapath, txtcode, model_name, model_epoch, seed=None, seedlen=5, o
             prediction, hidden_state = model(word, hidden_state)
 
         # k is arbitrarily 5, obtain topk of word guesses
-        values, indices = torch.topk(prediction, k=10)
+        values, indices = torch.topk(prediction, k=args.topk)
 
         # take the first item in list twice, as this item added 2 dimensions for sequence and batch
         indices = indices.tolist()[0][0]
@@ -83,7 +91,7 @@ def generate(datapath, txtcode, model_name, model_epoch, seed=None, seedlen=5, o
 
             prediction, hidden_state = model(word, hidden_state)
 
-            values, indices = torch.topk(prediction, k=10)
+            values, indices = torch.topk(prediction, k=args.topk)
             indices = indices.tolist()[0][0]
             chosen_int = random.choice(indices)
 
@@ -94,30 +102,4 @@ def generate(datapath, txtcode, model_name, model_epoch, seed=None, seedlen=5, o
 
 
 if __name__ == "__main__":
-    generate('./data', 'poe', model_name='RNN', model_epoch=4)
-
-"""
-Poe RNN epoch 4:
-just mentioned . To say the question of Mrs would appear but either on our friends . My immediate regard or some common 
-limits could found its extreme horror . The question were occupied by Peters of a third . These few and we perceive on 
-no particular portion of her body alone without getting on this occasion, and so much obvious to the earth a portion and 
-with the left of no farther than ourself for the than thirty hundred feet are the black building which set the rope as 
-far open the table which lay before the loss to
-
-
-
-
-Poe LSTM epoch 3:
-teares shall fill your eye in the street just one above those thousand hours after nine inches in its surface the 
-surface of the water, we saw a few small and fifty persons of a large gale had been thrown into an opposite window that 
-our head would the same appearance were about so far a small southern water, of the two men very large as far above his 
-own southern hand, is not in any other respect a thousand more fifty miles to be the ordinary appearance which has been 
-so easily observed that, as if we have been in
-
-evidence of extensive general reading. In you your mind this, after which he thought he took it until just afterward 
-until we came in a single search about one hour, and the third one, in their head, and, to find ourselves thus in a 
-strong sound than our usual In their position as most obvious than these purposes appeared to me as I thought proper 
-enough would pass down all upon me as to say, from them, I saw an air rather a foot in less utterly less vivid power for 
-their absolute general interest apparent than my seven and seventy
-
-"""
+    generate('./data', 'homer', model_name='LSTM', model_epoch=4, seed=('He', 'poised', 'his', 'spear', 'as', 'he', 'spoke'))

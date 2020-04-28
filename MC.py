@@ -104,36 +104,4 @@ if __name__ == '__main__':
     MC = MC_Model('./data', 'homer')
     MC.train()
 
-    print(MC.generate_text())
-
-'''
-=== Poe ===
-threaded; the distance by the visitation of God.” Having inherited his estate, all went well with me the necessity of 
-some Oriental investigations, to consult us, or if we duly consider the innocence, the artlessness, the enthusiasm, and 
-the whole extent of a heart almost bursting from the machinery. Between the chief means of which I was quite upon an 
-ottoman. “I see,” said he, “the night when I first, by mere accident, made his appearance, the converse of the burning 
-stables of the creature bestowed upon me by the way with decision; pausing only for an introduction, I was.
-
-
-
-=== Shakespeare ===
-Yet, that the bastard boys of ice, and do ’t, and leave us. ARCITE. Till our scale turn the business you have seen more 
-days than you; And what impossibility would slay In common worldly things 'tis called ungrateful With dull unwillingness 
-to repay a debt to none- yet, more to say, “Do you in some measure satisfy her so That I ask thee what is lost Makes the 
-remembrance of a warlike enterprise More venturous or desperate than this. Where is the Duke? DUKE. I am return'd your 
-soldier; No more than mortall; So your helpe be, And honour’d.
-
-Them acquainted with your approach; So, humbly take my life, Old fools are as much on her; Go to thy counsel! Then, even 
-now, disguis'd? KING. Madam, I will, Or else what lets it but his steward; no meed but he could not put him quite beside 
-his part, Or some of you, find out shames and praises be To those of old, I young. GREMIO. And so farewell, Signior 
-Lucentio. BAPTISTA. Away with her, she is her question. PANDARUS. That’s Antenor. He has a gentleman loves a cup of 
-wine. In this hard world, my ragged prison walls; And,.
-
-=== Homer ===
-It. This done, they brought from Arisbe. Hippothous led the people should cross your will with them were also Meriones, 
-Aphareus and Deipyrus, and the Trojans, as from some city that is being brought up in presence of him whom noble 
-Achilles has cut off the body; but all undaunted answered, "Archer, you who reign in heaven- devise evil for the 
-whizzing of the son of Menoetius and his heart was gladdened at the ships." On this Ulysses went at once spoke to the 
-counsel of great rain or hail or snowflakes that fly from off his armour out and.
-
-'''
+    print(MC.generate_text(seed=('He', 'poised')))

@@ -17,10 +17,10 @@ parser.add_argument('--num_epochs', default=5, type=int,
                     help='epochs to train for')
 parser.add_argument('--start_epoch', default=1, type=int,
                     help='epoch to start training. useful if continue from a checkpoint')
-parser.add_argument('--pretrain_epoch', default=4, type=int,
+parser.add_argument('--pretrain_epoch', default=1, type=int,
                     help='epoch to start training. useful if continue from a checkpoint')
 
-parser.add_argument('--batch_size', default=16, type=int,
+parser.add_argument('--batch_size', default=8, type=int,
                     help='input batch size')
 parser.add_argument('--seq_len', default=32, type=int,
                     help='length of the sequences for an individual data point')
@@ -37,8 +37,10 @@ parser.add_argument('--RNN_layers', default=2, type=int,
 parser.add_argument('--LSTM_layers', default=2, type=int,
                     help='number of layers of LSTM model')
 
-parser.add_argument('--dropout', default=0.1, type=int,
+parser.add_argument('--dropout', default=0.1, type=float,
                     help='dropout layer')
+parser.add_argument('--topk', default=10, type=int,
+                    help='top k words that may be randomly selected by the model')
 args = parser.parse_args()
 
 

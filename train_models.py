@@ -127,5 +127,6 @@ def train(datapath, txtcode, model_name, continue_train=False):
 
 
 if __name__ == '__main__':
-    train('./data', 'poe', 'LSTM')
+    train('./data', 'homer', 'RNN', continue_train=False)
+
 
